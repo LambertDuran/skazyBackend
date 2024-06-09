@@ -19,7 +19,7 @@ public class GenerateService {
 
         while (permutations.hasNext()){
             List<Integer> perm = permutations.next();
-            int[] permArray = perm.stream().mapToInt(Integer::intValue).toArray();
+            double[] permArray = perm.stream().mapToDouble(s -> s).toArray();
             if(this.solveEquation(permArray)){
                 solutions.add(perm);
             }
@@ -33,7 +33,7 @@ public class GenerateService {
         return new PermutationIterator<>(digits);
     }
 
-    private boolean solveEquation(int[] x){
+    public boolean solveEquation(double[] x){
         return x[0] + 13 * x[1] / x[2] + x[3] + 12 * x[4] - x[5] - 11 + x[6] * x[7] / x[8] - 10 == 66;
     }
 }

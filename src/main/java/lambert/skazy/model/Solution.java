@@ -15,10 +15,10 @@ public class Solution {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Integer Id;
+    Integer id;
 
     @ElementCollection
     List<Integer> unknowns;
 
-    boolean bIsValid;
+    boolean bisvalid;
 }

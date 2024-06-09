@@ -4,6 +4,7 @@ import lambert.skazy.model.Solution;
 import lambert.skazy.repository.SolutionRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -34,12 +35,26 @@ public class SolutionService {
         solutionRepository.deleteById(id);
     }
 
-    public void update(Solution solution){
+    public Solution update(Solution solution){
         solutionRepository
                 .findById(solution.getId())
                 .orElseThrow(() -> new NoSuchElementException("Solution not found."));
 
-        solutionRepository.save(solution);
+        HashSet<Integer> set = new HashSet<>(solution.getUnknowns());
+        boolean bIsValid = set.size() == solution.getUnknowns().size();
+
+        if(bIsValid){
+            double[] unknowns = solution
+                    .getUnknowns()
+                    .stream()
+                    .mapToDouble(s -> s)
+                    .toArray();
+            bIsValid = generateService.solveEquation(unknowns);
+        }
+
+        solution.setBisvalid(bIsValid);
+
+        return solutionRepository.save(solution);
     }
 
     public List<Solution> generate(){
@@ -51,7 +66,7 @@ public class SolutionService {
         integerSolutions.forEach(s -> {
             Solution solution = new Solution();
             solution.setUnknowns(s);
-            solution.setBIsValid(true);
+            solution.setBisvalid(true);
             solutionRepository.save(solution);
         });
 
