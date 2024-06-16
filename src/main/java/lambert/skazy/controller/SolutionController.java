@@ -50,7 +50,6 @@ public class SolutionController {
 
     @PutMapping("api/solution")
     Solution updateSolution(@RequestBody Solution solution){
-        var test = solutionService.update(solution);
-        return test;
+        return solutionService.update(solution);
     }
 }
